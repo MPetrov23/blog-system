@@ -23,12 +23,15 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers("/", "/home",
-                                "/goToRegistrationPage", "/register",
-                                "/goToLoginPage","/processLogIn")
-                        .permitAll()
-                        .anyRequest().authenticated()
+
+                .authorizeHttpRequests(
+                        requests -> requests
+                                .requestMatchers("/", "/home",
+                                        "/goToRegistrationPage", "/register",
+                                        "/goToLoginPage","/processLogIn",
+                                        "/logout")
+                                .permitAll()
+                                .anyRequest().authenticated()
                 )
                 .formLogin(
                         form -> form
@@ -39,11 +42,10 @@ public class SecurityConfig {
                                 .defaultSuccessUrl("/",true)
                                 .permitAll()
                 )
-                .logout((logout) -> logout
-                        .logoutSuccessUrl("/")
-                        .permitAll()
+                .logout(
+                        logout -> logout
+                                .logoutSuccessUrl("/")
                 );
-
         return http.build();
     }
 
@@ -52,8 +54,5 @@ public class SecurityConfig {
                 .userDetailsService(userDetailsService)
                 .passwordEncoder(passwordEncoder());
     }
-
-
-
 
 }

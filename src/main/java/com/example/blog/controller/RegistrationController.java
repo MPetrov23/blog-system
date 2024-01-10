@@ -1,6 +1,7 @@
 package com.example.blog.controller;
 
 import com.example.blog.model.User;
+import com.example.blog.service.EmailService;
 import com.example.blog.service.UserServiceImpl;
 import com.example.blog.validation.DataValidation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 public class RegistrationController {
         @Autowired
         UserServiceImpl userService;
+        @Autowired
+        EmailService email;
+
     @GetMapping("/goToRegistrationPage")
     public String registrationPage(Model model) {
         User user = new User();
@@ -83,6 +87,7 @@ public class RegistrationController {
         }
 
         userService.createUser(user);
+        email.confirmRegistrationMail(user.getEmail(),user.getFirstName()+" "+user.getLastName());
         return "redirect:/goToRegistrationPage?success";
     }
 }
